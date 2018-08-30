@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="d3.layout.cloud.js"></script>
+<head>
+    <title>Word Cloud Example</title>
+</head>
+<style>
+    body {
+        font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+    }
+    .legend {
+        border: 1px solid #555555;
+        border-radius: 5px 5px 5px 5px;
+        font-size: 0.8em;
+        margin: 10px;
+        padding: 8px;
+    }
+    .bld {
+        font-weight: bold;
+    }
+</style>
+<body>
+
+</body>
+<script>
+
+    var frequency_list = [
+{text: 'great', size:145.2},{text: 'us', size:64.5},{text: 'people', size:60.3},{text: 'thank', size:57.9},{text: 'news', size:52.8},{text: 'today', size:49.5},{text: 'just', size:48.0},{text: 'fake', size:44.4},{text: 'president', size:43.5},{text: 'america', size:42.9},{text: 'big', size:42.9},{text: 'now', size:41.4},{text: 'trump', size:41.1},{text: 'country', size:37.2},{text: 'jobs', size:36.3},{text: 'american', size:33.0},{text: 'time', size:32.4},{text: 'many', size:32.1},{text: 'media', size:32.1},{text: 'new', size:32.1},{text: 'make', size:30.6},{text: 'get', size:30.3},{text: 'tax', size:28.8},{text: 'election', size:27.9},{text: 'much', size:27.0},{text: 'going', size:24.0},{text: 'states', size:23.7},{text: 'must', size:23.7},{text: 'can', size:23.1},{text: 'healthcare', size:23.1},{text: 'never', size:23.1},{text: 'united', size:23.1},{text: 'democrats', size:23.1},{text: 'years', size:22.8},{text: 'back', size:22.8},{text: 'obamacare', size:22.5},{text: 'working', size:22.2},{text: 'day', size:22.2},{text: 'vote', size:21.9},{text: 'first', size:21.6},{text: 'russia', size:21.3},{text: 'good', size:21.3},{text: 'honor', size:21.0},{text: 'north', size:20.7},{text: 'even', size:20.4},{text: 'one', size:20.1},{text: 'house', size:19.8},{text: 'bad', size:19.5},{text: 'made', size:19.5},{text: 'hillary', size:18.9},{text: 'hard', size:18.9},{text: 'korea', size:18.6},{text: 'national', size:18.3},{text: 'win', size:18.3},{text: 'meeting', size:18.0},{text: 'join', size:18.0},{text: 'dems', size:17.7},{text: 'want', size:17.4},{text: 'security', size:17.4},{text: 'dont', size:17.4},{text: 'state', size:17.1},{text: 'obama', size:16.8},{text: 'clinton', size:16.8},{text: 'together', size:16.8},{text: 'help', size:16.8},{text: 'job', size:16.5},{text: 'military', size:16.2},{text: 'last', size:15.9},{text: 'like', size:15.9},{text: 'said', size:15.6},{text: 'republicans', size:15.6},{text: 'republican', size:15.6},{text: 'happy', size:15.3},{text: 'pm', size:15.3},{text: 'way', size:15.0},{text: 'china', size:14.7},{text: 'see', size:14.7},{text: 'wonderful', size:14.7},{text: 'looking', size:14.4},{text: 'look', size:14.4},{text: 'deal', size:14.1},{text: 'w', size:13.8},{text: 'watch', size:13.8},{text: 'story', size:13.8},{text: 'tonight', size:13.5},{text: 'forward', size:13.5},{text: 'world', size:13.2},{text: 'cuts', size:13.2},{text: 'welcome', size:12.9},{text: 'white', size:12.6},{text: 'congratulations', size:12.6},{text: 'senate', size:12.6},{text: 'work', size:12.6},{text: 'night', size:12.6},{text: 'done', size:12.6},{text: 'administration', size:12.6},{text: 'since', size:12.3},{text: 'ever', size:12.3},{text: 'getting', size:12.3},{text: 'tomorrow', size:12.0},{text: 'none', size: 0}
+
+          ];
+
+
+    var color = d3.scale.linear()
+            .domain([0,1,2,3,4,5,6,10,15,20,100])
+            .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+
+    d3.layout.cloud().size([850, 300])
+            .words(frequency_list)
+            .rotate(0)
+            .fontSize(function(d) { return d.size; })
+            .on("end", draw)
+            .start();
+
+    function draw(words) {
+        d3.select("body").append("svg")
+                .attr("width", 900)
+                .attr("height", 350)
+                .attr("class", "wordcloud")
+                .append("g")
+                // without the transform, words words would get cutoff to the left and top, they would
+                // appear outside of the SVG area
+                .attr("transform", "translate(370,200)")
+                .selectAll("text")
+                .data(words)
+                .enter().append("text")
+                .style("font-size", function(d) { return d.size + "px"; })
+                .style("fill", function(d, i) { return color(i); })
+                .attr("transform", function(d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .text(function(d) { return d.text; });
+    }
+</script>
+
+<div style="width: 40%;">
+    <div class="legend">
+        Commonly used words are larger and slightly faded in color.  Less common words are smaller and darker.
+    </div>
+
+</div>
+
+
+</html>
